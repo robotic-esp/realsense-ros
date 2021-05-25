@@ -113,7 +113,7 @@ aluminum peripherial evaluation case.
     <xacro:if value="${use_nominal_extrinsics}">
       <!-- camera depth joints and links -->
       <joint name="${name}_depth_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="0 0 0"/> <!-- -0.016 0.028 0.016 -->
+        <origin xyz="0 0 0" rpy="-0.016 0.0 0.016"/>
         <parent link="${name}_transmitter_frame"/>
         <child link="${name}_depth_frame" />
       </joint>
@@ -143,7 +143,7 @@ aluminum peripherial evaluation case.
 
       <!-- camera color joints and links -->
       <joint name="${name}_color_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 0" rpy="0 -0.028 0" />
         <parent link="${name}_rgb_frame" />
         <child link="${name}_color_frame" />
       </joint>
