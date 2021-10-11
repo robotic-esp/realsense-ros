@@ -5,7 +5,7 @@ This version supports Kinetic, Melodic and Noetic distributions.
 
 For running in ROS2 environment please switch to the [ros2 branch](https://github.com/IntelRealSense/realsense-ros/tree/ros2). </br>
 
-LibRealSense supported version: v2.43.0 (see [realsense2_camera release notes](https://github.com/IntelRealSense/realsense-ros/releases))
+LibRealSense2 supported version: v2.48.0 (see [realsense2_camera release notes](https://github.com/IntelRealSense/realsense-ros/releases))
 
 ## Installation Instructions
 
@@ -26,29 +26,15 @@ LibRealSense supported version: v2.43.0 (see [realsense2_camera release notes](h
 
     realsense2_camera is available as a debian package of ROS distribution. It can be installed by typing:
     
-    ```
-    export ROS_VER=kinetic 
-    ```
-    or
-    ```
-    export ROS_VER=melodic 
-    ```
-    or
-    ```
-    export ROS_VER=noetic 
-    ```
-    
-    Then install the ros packages using the environment variable created above:
-    
-    ```sudo apt-get install ros-$ROS_VER-realsense2-camera```
+    ```sudo apt-get install ros-$ROS_DISTRO-realsense2-camera```
 
-    This will install both realsense2_camera and its dependents, including librealsense2 library.
+    This will install both realsense2_camera and its dependents, including librealsense2 library and matching udev-rules.
 
     Notice:
     * The version of librealsense2 is almost always behind the one availeable in RealSense&trade; official repository.
     * librealsense2 is not built to use native v4l2 driver but the less stable RS-USB protocol. That is because the last is more general and operational on a larger variety of platforms.
     * realsense2_description is available as a separate debian package of ROS distribution. It includes the 3D-models of the devices and is necessary for running launch files that include these models (i.e. rs_d435_camera_with_model.launch). It can be installed by typing:
-    `sudo apt-get install ros-$ROS_VER-realsense2-description`
+    `sudo apt-get install ros-$ROS_DISTRO-realsense2-description`
 
   *Windows*
 
@@ -61,9 +47,11 @@ LibRealSense supported version: v2.43.0 (see [realsense2_camera release notes](h
    ### Step 1: Install the latest Intel&reg; RealSense&trade; SDK 2.0
 
     *Ubuntu*
-
-    * Install from [Debian Package](https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md#installing-the-packages)
-      - In that case treat yourself as a developer. Make sure you follow the instructions to also install librealsense2-dev and librealsense-dkms packages.
+    
+    Install librealsense2 debian package:
+    * Jetson users - use the [Jetson Installation Guide](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation_jetson.md)
+    * Otherwise, install from [Linux Debian Installation Guide](https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md#installing-the-packages)
+      - In that case treat yourself as a developer. Make sure you follow the instructions to also install librealsense2-dev and librealsense2-dkms packages.
 
     *Windows* 
     Install using vcpkg
@@ -71,7 +59,7 @@ LibRealSense supported version: v2.43.0 (see [realsense2_camera release notes](h
         `vcpkg install realsense2:x64-windows` 
 
    #### OR
-   - #### Build from sources by downloading the latest [Intel&reg; RealSense&trade; SDK 2.0](https://github.com/IntelRealSense/librealsense/releases/tag/v2.43.0) and follow the instructions under [Linux Installation](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md)
+   - #### Build from sources by downloading the latest [Intel&reg; RealSense&trade; SDK 2.0](https://github.com/IntelRealSense/librealsense/releases/tag/v2.48.0) and follow the instructions under [Linux Installation](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md)
 
 
    ### Step 2: Install Intel&reg; RealSense&trade; ROS from Sources
@@ -164,6 +152,7 @@ If using D435 or D415, the gyro and accel topics wont be available. Likewise, ot
 
 ### Available services:
 - reset : Cause a hardware reset of the device. Usage: `rosservice call /camera/realsense2_camera/reset`
+- enable : Start/Stop all streaming sensors. Usage example: `rosservice call /camera/enable False"`
 
 ### Launch parameters
 The following parameters are available by the wrapper:
@@ -173,8 +162,8 @@ The following parameters are available by the wrapper:
 
 - **rosbag_filename**: Will publish topics from rosbag file.
 - **initial_reset**: On occasions the device was not closed properly and due to firmware issues needs to reset. If set to true, the device will reset prior to usage.
-- **align_depth**: If set to true, will publish additional topics with the all the images aligned to the depth image.</br>
-The topics are of the form: ```/camera/aligned_depth_to_color/image_raw``` etc.
+- **align_depth**: If set to true, will publish additional topics for the "aligned depth to color" image.: ```/camera/aligned_depth_to_color/image_raw```, ```/camera/aligned_depth_to_color/camera_info```.</br>
+The pointcloud, if enabled, will be built based on the aligned_depth_to_color image.</br>
 - **filters**: any of the following options, separated by commas:</br>
  - ```colorizer```: will color the depth image. On the depth topic an RGB image will be published, instead of the 16bit depth values .
  - ```pointcloud```: will add a pointcloud topic `/camera/depth/color/points`.
@@ -192,8 +181,8 @@ The topics are of the form: ```/camera/aligned_depth_to_color/image_raw``` etc.
    - ```hole_filling``` - apply hole-filling filter.
    - ```decimation``` - reduces depth scene complexity.
 - **enable_sync**: gathers closest frames of different sensors, infra red, color and depth, to be sent with the same timetag. This happens automatically when such filters as pointcloud are enabled.
-- ***<stream_type>*_width**, ***<stream_type>*_height**, ***<stream_type>*_fps**: <stream_type> can be any of *infra, color, fisheye, depth, gyro, accel, pose*. Sets the required format of the device. If the specified combination of parameters is not available by the device, the stream will be replaced with the default for that stream. Setting a value to 0, will choose the first format in the inner list. (i.e. consistent between runs but not defined).</br>*Note: for gyro accel and pose, only _fps option is meaningful.
-- **enable_*<stream_name>***: Choose whether to enable a specified stream or not. Default is true for images and false for orientation streams. <stream_name> can be any of *infra1, infra2, color, depth, fisheye, fisheye1, fisheye2, gyro, accel, pose*.
+- ***<stream_type>*_width**, ***<stream_type>*_height**, ***<stream_type>*_fps**: <stream_type> can be any of *infra, color, fisheye, depth, gyro, accel, pose, confidence*. Sets the required format of the device. If the specified combination of parameters is not available by the device, the stream will be replaced with the default for that stream. Setting a value to 0, will choose the first format in the inner list. (i.e. consistent between runs but not defined).</br>*Note: for gyro accel and pose, only _fps option is meaningful.
+- **enable_*<stream_name>***: Choose whether to enable a specified stream or not. Default is true for images and false for orientation streams. <stream_name> can be any of *infra1, infra2, color, depth, fisheye, fisheye1, fisheye2, gyro, accel, pose, confidence*.
 - **tf_prefix**: By default all frame's ids have the same prefix - `camera_`. This allows changing it per camera.
 - ***<stream_name>*_frame_id**, ***<stream_name>*_optical_frame_id**, **aligned_depth_to_*<stream_name>*_frame_id**: Specify the different frame_id for the different frames. Especially important when using multiple cameras.
 - **base_frame_id**: defines the frame_id all static transformations refers to.
@@ -306,8 +295,8 @@ roslaunch realsense2_description view_d415_model.launch
 Unit-tests are based on bag files saved on S3 server. These can be downloaded using the following commands:
 ```bash
 cd catkin_ws
-wget "http://realsense-hw-public.s3.amazonaws.com/rs-tests/TestData/outdoors.bag" -P "records/"
-wget "http://realsense-hw-public.s3-eu-west-1.amazonaws.com/rs-tests/D435i_Depth_and_IMU_Stands_still.bag" -P "records/"
+wget "https://librealsense.intel.com/rs-tests/TestData/outdoors.bag" -P "records/"
+wget "https://librealsense.intel.com/rs-tests/D435i_Depth_and_IMU_Stands_still.bag" -P "records/"
 ```
 Then, unit-tests can be run using the following command (use either python or python3):
 ```bash

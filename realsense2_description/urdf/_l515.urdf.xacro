@@ -13,7 +13,7 @@ aluminum peripherial evaluation case.
   <xacro:include filename="$(find realsense2_description)/urdf/_materials.urdf.xacro" />
   <xacro:include filename="$(find realsense2_description)/urdf/_usb_plug.urdf.xacro" /> <!-- this specific plug does not apply to L515 -->
 
-  <xacro:macro name="sensor_l515" params="parent *origin name:=camera use_nominal_extrinsics:=false add_plug:=false">
+  <xacro:macro name="sensor_l515" params="parent *origin name:=camera use_nominal_extrinsics:=false add_plug:=false use_mesh:=true">
     <xacro:property name="M_PI" value="3.1415926535897931" />
 
     <!-- The following values are approximate, and the camera node
@@ -29,13 +29,23 @@ aluminum peripherial evaluation case.
     <!-- Zero depth to glass: see datasheet Revision 002, Fig. 2-2 page 11 -->
     <xacro:property name="l515_cam_depth_to_glass" value="0.0044533"/>
 
-    <!-- The following offset is relative the the physical D435 camera peripherial
+    <!-- The following offset is relative the the physical L515 camera peripherial
   	camera tripod mount -->
     <xacro:property name="l515_cam_center"   value="0.03015"/>
     <xacro:property name="l515_cam_center_to_transmitter_pz"  value="0.001"/>
     <xacro:property name="l515_cam_transmitter_to_receiver_pz"   value="-0.010"/>
     <xacro:property name="l515_cam_transmitter_to_rgb_pz"   value="0.014182"/>
     <xacro:property name="l515_cam_mount_from_center"   value="0.020"/>
+
+    <!-- IMU position (p) and rotation (r) offsets from the camera color frame -->
+    <!-- These values are approximate and depend on the actual calibrated camera extrinsic values -->
+    <xacro:property name="l515_cam_color_to_imu_px" value="-0.00410137791186571"/>
+    <xacro:property name="l515_cam_color_to_imu_py" value="-0.0129784867167473"/>
+    <xacro:property name="l515_cam_color_to_imu_pz" value="0.00256138201802969"/>
+    <xacro:property name="l515_cam_color_to_imu_rx" value="-0.006161012"/>
+    <xacro:property name="l515_cam_color_to_imu_ry" value="0.020193459"/>
+    <xacro:property name="l515_cam_color_to_imu_rz" value="0.016301375"/>
+
 
     <!-- IMU position (p) and rotation (r) offsets from the camera color frame -->
     <!-- These values are approximate and depend on the actual calibrated camera extrinsic values -->
