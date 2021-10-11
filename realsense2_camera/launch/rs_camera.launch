@@ -9,6 +9,7 @@
   <arg name="manager"             default="realsense2_camera_manager"/>
   <arg name="output"              default="screen"/>
   <arg name="required"            default="true"/>
+  <arg name="respawn"             default="true"/>
 
   <arg name="fisheye_width"       default="-1"/>
   <arg name="fisheye_height"      default="-1"/>
