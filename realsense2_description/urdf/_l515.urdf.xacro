@@ -38,7 +38,7 @@ aluminum peripherial evaluation case.
     <xacro:property name="l515_cam_mount_from_center"   value="0.020"/>
 
     <xacro:property name="l515_cam_transmitter_to_imu_py" value="-0.01245"/>
-    <xacro:property name="l515_cam_transmitter_to_imu_pz" value="0.0105"/>
+    <xacro:property name="l515_cam_transmitter_to_imu_pz" value="0.01151"/>
 
     <!-- camera body, with origin at bottom screw mount -->
     <joint name="${name}_joint" type="fixed">
