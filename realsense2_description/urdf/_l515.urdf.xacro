@@ -28,24 +28,14 @@ aluminum peripherial evaluation case.
 
     <!-- The following offset is relative the the physical L515 camera peripherial
   	camera tripod mount -->
-    <xacro:property name="l515_cam_center"   value="0.03015"/>
-    <xacro:property name="l515_cam_center_to_transmitter_pz"  value="0.001"/>
-    <xacro:property name="l515_cam_transmitter_to_receiver_pz"   value="-0.010"/>
-    <xacro:property name="l515_cam_transmitter_to_rgb_pz"   value="0.014"/>
-    <xacro:property name="l515_cam_mount_from_center"   value="0.020"/>
+    <xacro:property name="l515_cam_center" value="0.03015"/>
+    <xacro:property name="l515_cam_center_to_transmitter_pz" value="0.001"/>
+    <xacro:property name="l515_cam_transmitter_to_receiver_pz" value="-0.010"/>
+    <xacro:property name="l515_cam_transmitter_to_rgb_pz" value="0.014"/>
+    <xacro:property name="l515_cam_mount_from_center" value="0.020"/>
 
     <xacro:property name="l515_cam_transmitter_to_imu_py" value="-0.01245"/>
     <xacro:property name="l515_cam_transmitter_to_imu_pz" value="0.01151"/>
-
-
-    <!-- IMU position (p) and rotation (r) offsets from the camera color frame -->
-    <!-- These values are approximate and depend on the actual calibrated camera extrinsic values -->
-    <xacro:property name="l515_cam_color_to_imu_px" value="-0.00410137791186571"/>
-    <xacro:property name="l515_cam_color_to_imu_py" value="-0.0129784867167473"/>
-    <xacro:property name="l515_cam_color_to_imu_pz" value="0.00256138201802969"/>
-    <xacro:property name="l515_cam_color_to_imu_rx" value="-0.006161012"/>
-    <xacro:property name="l515_cam_color_to_imu_ry" value="0.020193459"/>
-    <xacro:property name="l515_cam_color_to_imu_rz" value="0.016301375"/>
 
     <!-- camera body, with origin at bottom screw mount -->
     <joint name="${name}_joint" type="fixed">
@@ -75,13 +65,6 @@ aluminum peripherial evaluation case.
           <cylinder radius="${l515_cam_width}" length="${l515_cam_depth}"/>
         </geometry>
       </collision>
-      <inertial>
-        <!-- The following are not reliable values, and should not be used for modeling -->
-        <!-- calculated assuming full cylinder as described here: https://en.wikipedia.org/wiki/List_of_moments_of_inertia -->
-        <mass value="0.095" />
-        <origin xyz="0 0 0" />
-        <inertia ixx="0.000044" ixy="0.0" ixz="0.0" iyy="0.000027" iyz="0.0" izz="0.000027" />
-      </inertial>
     </link>
 
     <joint name="${name}_lower_mount_joint" type="fixed">
