@@ -95,13 +95,6 @@ aluminum peripherial evaluation case.
     </joint>
     <link name="${name}_receiver_frame"/>
 
-    <joint name="${name}_link_joint" type="fixed">
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <parent link="${name}_receiver_frame"/>
-      <child link="${name}_link" />
-    </joint>
-    <link name="${name}_link"/>
-
     <joint name="${name}_rgb_joint" type="fixed">
       <origin xyz="${l515_cam_depth_to_glass} 0 ${l515_cam_transmitter_to_rgb_pz}" rpy="0 0 0"/>
       <parent link="${name}_transmitter_frame"/>
