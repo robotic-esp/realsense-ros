@@ -24,7 +24,7 @@ aluminum peripherial evaluation case.
     <xacro:property name="l515_cam_depth" value="0.026"/>
     <xacro:property name="l515_cam_mount_from_glass_offset" value="0.012"/>
     <!-- Zero depth to glass: see datasheet Revision 002, Fig. 2-2 page 11 -->
-    <xacro:property name="l515_cam_depth_to_glass" value="0.0045"/>
+    <xacro:property name="l515_cam_depth_to_glass" value="0.004"/>
 
     <!-- The following offset is relative the the physical L515 camera peripherial
   	camera tripod mount -->
@@ -34,8 +34,9 @@ aluminum peripherial evaluation case.
     <xacro:property name="l515_cam_transmitter_to_rgb_pz" value="0.014"/>
     <xacro:property name="l515_cam_mount_from_center" value="0.020"/>
 
-    <xacro:property name="l515_cam_transmitter_to_imu_py" value="-0.01245"/>
-    <xacro:property name="l515_cam_transmitter_to_imu_pz" value="0.01151"/>
+    <xacro:property name="l515_cam_transmitter_to_imu_px" value="-0.001"/>
+    <xacro:property name="l515_cam_transmitter_to_imu_py" value="-0.012"/>
+    <xacro:property name="l515_cam_transmitter_to_imu_pz" value="0.016"/>
 
     <!-- camera body, with origin at bottom screw mount -->
     <joint name="${name}_joint" type="fixed">
@@ -103,7 +104,7 @@ aluminum peripherial evaluation case.
     <link name="${name}_rgb_frame"/>
 
     <joint name="${name}_imu_joint" type="fixed">
-      <origin xyz = "0 ${l515_cam_transmitter_to_imu_py} ${l515_cam_transmitter_to_imu_pz}" rpy = "0 0 0" />
+      <origin xyz = "${l515_cam_transmitter_to_imu_px} ${l515_cam_transmitter_to_imu_py} ${l515_cam_transmitter_to_imu_pz}" rpy = "0 0 0" />
       <parent link="${name}_transmitter_frame" />
       <child link="${name}_imu_frame" />
     </joint>
